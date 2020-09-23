@@ -1,0 +1,49 @@
+{
+  "variables": {
+    "profile": "{{env `AWS_PROFILE`}}",
+    "aws_region": "{{env `AWS_REGION`}}",
+    "timestamp": "{{isotime \"20060102150405\"}}",
+    "lw_account": "{{env `LW_ACCOUNT`}}",
+    "lw_api_key": "{{env `LW_API_KEY`}}",
+    "lw_api_secret": "{{env `LW_API_SECRET`}}"
+  },
+  "builders": [{
+    "type": "amazon-ebs",
+    "profile": "{{user `profile`}}",
+    "region": "{{user `aws_region`}}",
+    "source_ami_filter": {
+      "filters": {
+        "virtualization-type": "hvm",
+        "name": "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*",
+        "root-device-type": "ebs"
+      },
+      "owners": ["099720109477"],
+      "most_recent": true
+    },
+    "instance_type": "t2.micro",
+    "ssh_username": "ubuntu",
+    "ssh_pty": true,
+    "ami_name": "ubuntu1804-base-lacework-{{user `timestamp`}}"
+  }],
+  "provisioners": [
+    {
+      "type": "shell",
+      "environment_vars": [
+        "LW_ACCOUNT={{user `lw_account`}}",
+        "LW_API_KEY={{user `lw_api_key`}}",
+        "LW_API_SECRET={{user `lw_api_secret`}}"
+      ],
+      "inline": [
+        "curl https://raw.githubusercontent.com/lacework/go-sdk/master/cli/install.sh | sudo bash",
+        "lacework vulnerability host scan-pkg-manifest --local | tee /tmp/lacework-vulnerability.out",
+        "sudo rm -rf /usr/local/bin/lacework"
+      ]
+    },
+    {
+      "type": "file",
+      "source": "/tmp/lacework-vulnerability.out",
+      "destination": "/tmp/lacework-vulnerability.out",
+      "direction": "download" 
+    }
+  ]
+}

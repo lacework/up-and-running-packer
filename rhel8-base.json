@@ -1,0 +1,55 @@
+{
+  "variables": {
+    "profile": "{{env `AWS_PROFILE`}}",
+    "aws_region": "{{env `AWS_REGION`}}",
+    "timestamp": "{{isotime \"20060102150405\"}}",
+    "lw_account": "{{env `LW_ACCOUNT`}}",
+    "lw_api_key": "{{env `LW_API_KEY`}}",
+    "lw_api_secret": "{{env `LW_API_SECRET`}}"
+  },
+  "builders": [{
+    "type": "amazon-ebs",
+    "profile": "{{user `profile`}}",
+    "region": "{{user `aws_region`}}",
+    "source_ami_filter": {
+      "filters": {
+        "virtualization-type": "hvm",
+        "name": "RHEL-8.2.0_HVM-20200423-x86_64*",
+        "root-device-type": "ebs"
+      },
+      "owners": ["309956199498"],
+      "most_recent": true
+    },
+    "instance_type": "t2.micro",
+    "ssh_username": "ec2-user",
+    "ssh_pty": true,
+    "ami_name": "rhel8-base-lacework-{{user `timestamp`}}"
+  }],
+  "provisioners": [
+    {
+      "type": "shell",
+      "environment_vars": [
+        "LW_ACCOUNT={{user `lw_account`}}",
+        "LW_API_KEY={{user `lw_api_key`}}",
+        "LW_API_SECRET={{user `lw_api_secret`}}"
+      ],
+      "inline": [
+        "sudo yum update -y",
+        "sudo yum upgrade -y",
+        "curl https://raw.githubusercontent.com/lacework/go-sdk/master/cli/install.sh | sudo bash",
+        "lacework vulnerability host scan-pkg-manifest --local | tee /tmp/rhel8-lacework-vulnerability.out",
+        "sudo rm -rf /usr/local/bin/lacework"
+      ]
+    },
+    {
+      "type": "file",
+      "source": "/tmp/lacework-vulnerability.out",
+      "destination": "/tmp/rhel8-lacework-vulnerability.out",
+      "direction": "download" 
+    },
+    {
+      "type": "local-shell",
+      "inline": ["cat /tmp/rhel8-lacework-vulnerability.out"]
+    }
+  ]
+}
