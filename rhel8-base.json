@@ -43,13 +43,9 @@
     },
     {
       "type": "file",
-      "source": "/tmp/lacework-vulnerability.out",
+      "source": "/tmp/rhel8-lacework-vulnerability.out",
       "destination": "/tmp/rhel8-lacework-vulnerability.out",
       "direction": "download" 
-    },
-    {
-      "type": "local-shell",
-      "inline": ["cat /tmp/rhel8-lacework-vulnerability.out"]
     }
   ]
 }
