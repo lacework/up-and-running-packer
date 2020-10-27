@@ -28,8 +28,8 @@ $ export LW_API_SECRET='<YOUR LACEWORK API SECRET>'
 
 ## Build
 ```bash
-$ packer build ubuntu1804-base.json
-/src/up-and-running-packer(master) » packer build ubuntu1804-base.json
+$ packer build aws_ubuntu1804_base_vulns.json
+/src/up-and-running-packer(master) » packer build aws_ubuntu1804_base_vulns.json
 amazon-ebs: output will be in this color.
 
 ==> amazon-ebs: Prevalidating any provided VPC information
