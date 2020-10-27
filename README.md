@@ -19,11 +19,11 @@ were found.
 Before beginning export the following environment variables:
 
 ```bash
-$ export AWS_PROFILE='<YOUR AWS PROFILE>' # ~/.aws/credentials
-$ export AWS_REGION='us-east-1'
-$ export LW_ACCOUNT='<YOUR LACEWORK ACCOUNT NAME>'
-$ export LW_API_KEY='<YOUR LACEWORK API KEY>'
-$ export LW_API_SECRET='<YOUR LACEWORK API SECRET>'
+$ export AWS_PROFILE=<YOUR AWS PROFILE> # ~/.aws/credentials
+$ export AWS_REGION=us-east-1
+$ export LW_ACCOUNT=<YOUR LACEWORK ACCOUNT NAME>
+$ export LW_API_KEY=<YOUR LACEWORK API KEY>
+$ export LW_API_SECRET=<YOUR LACEWORK API SECRET>
 ```
 
 ## Build
