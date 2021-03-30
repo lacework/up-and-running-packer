@@ -36,7 +36,7 @@
       "inline": [
         "sudo yum update -y",
         "sudo yum upgrade -y",
-        "curl https://raw.githubusercontent.com/lacework/go-sdk/master/cli/install.sh | sudo bash",
+        "curl https://raw.githubusercontent.com/lacework/go-sdk/main/cli/install.sh | sudo bash",
         "lacework vulnerability host scan-pkg-manifest --local | tee /tmp/rhel8-lacework-vulnerability.out",
         "sudo rm -rf /usr/local/bin/lacework"
       ]
